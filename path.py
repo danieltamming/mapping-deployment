@@ -1,7 +1,5 @@
 import time
 
-import matplotlib.pyplot as plt
-import osmnx as ox
 import networkx as nx
 from networkx.classes.graphviews import subgraph_view
 

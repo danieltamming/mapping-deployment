@@ -5,7 +5,7 @@ import os
 from path import Path
 from gmaps import get_gmaps_route, get_gmaps_coords
 from utils import get_all_data, get_meeting_location
-from keys import ACCESS_TOKEN, VERIFY_TOKEN
+# from keys import ACCESS_TOKEN, VERIFY_TOKEN
 
 def get_response(message):
 	if len(message.split('.', 2)) != 3:
@@ -35,8 +35,8 @@ right = -79.123111
 my_df, stops, trip_names, DG = get_all_data()
 
 FB_API_URL = 'https://graph.facebook.com/v2.6/me/messages'
-# ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
-# VERIFY_TOKEN = os.environ['VERIFY_TOKEN']
+ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
+VERIFY_TOKEN = os.environ['VERIFY_TOKEN']
 
 app = Flask(__name__)
 

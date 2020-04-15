@@ -5,7 +5,6 @@ from datetime import datetime, timedelta, date
 import geopy.distance
 
 from tqdm import tqdm
-import matplotlib.pyplot as plt
 import networkx as nx
 from networkx.readwrite.gpickle import read_gpickle, write_gpickle
 
