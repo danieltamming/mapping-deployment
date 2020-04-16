@@ -82,5 +82,5 @@ def listen():
 				respond(sender_id, text)
 		return 'ok'
 
-if __name__ == "__main__":
-    app.run()
+# if __name__ == "__main__":
+#     app.run()
