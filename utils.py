@@ -1,3 +1,6 @@
+import math
+import bisect
+
 import geopy.distance
 import networkx.algorithms.shortest_paths.weighted as algos
 from tqdm import tqdm
@@ -151,8 +154,47 @@ def get_points():
 		points) = get_gmaps_route(A=start_drive, B=end_drive, saving=True)
 	return polies, start_coord
 
+def prune_coords(coords):
+	'''
+	Removes coordinates that are outside the range of Toronto Transit
+	Makes coordinate list no longer than max_len
+	Does not preserve order
+	'''
+	max_len = 30
+	transit_top = 43.90975
+	transit_left = -79.649908
+	transit_bottom = 43.591811
+	transit_right = -79.123111
+	orig = coords.copy()
+
+	coords = [(lat, lon, idx) for idx, (lat, lon) in enumerate(coords)]
+	coords = sorted(coords, key=lambda tup: tup[1])
+	left_idx = bisect.bisect_left([lon for (lat, lon, idx) in coords], transit_left)
+	coords = coords[left_idx:]
+	right_idx = bisect.bisect_right([lon for (lat, lon, idx) in coords], transit_right)
+	coords = coords[:right_idx]
+	coords = sorted(coords, key=lambda tup: tup[0])
+	bottom_idx = bisect.bisect_left([lat for (lat, lon, idx) in coords], transit_bottom)
+	coords = coords[bottom_idx:]
+	top_idx = bisect.bisect_right([lat for (lat, lon, idx) in coords], transit_top)
+	coords = coords[:top_idx]
+	coords = sorted(coords, key=lambda tup: tup[2])
+	coords = [(lat, lon) for (lat, lon, idx) in coords]
+	if not coords:
+		return -1
+	ls1 = [element for element in orig if element in coords]
+	ls2 = [element for element in coords if element in orig]
+	assert ls1 == ls2
+	# make list no longer than max_len
+	k = math.ceil(len(coords) / max_len)
+	coords = coords[::k]
+	return coords
+
 def get_meeting_location(DG, my_df, stops, start_coord, 
 						 drive_coords, trip_names):
+	drive_coords = prune_coords(drive_coords)
+	if drive_coords == -1:
+		return -1
 	best_time = float('inf')
 	for end_coord in tqdm(drive_coords):
 		path = get_best_route(DG, my_df, stops, start_coord, end_coord, 8)

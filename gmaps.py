@@ -13,9 +13,13 @@ def get_gmaps_route(A=None, B=None, saving=False, example=False):
 	# assert os.path.exists('keys.py') , 'Need Google API key. See README.'
 	# from keys import API_KEY
 	gmaps = googlemaps.Client(key=API_KEY)
-	result = gmaps.directions(A, B, mode='driving', units='metric')
+	try:
+		result = gmaps.directions(A, B, mode='driving', units='metric')
+		# result = pickle.load(open('temp.pickle', 'rb'))
+	except:
+		return (-1, -1, -1, -1, -1, -1)
 	if not result:
-		return (-1, -1, -1, -1)
+		return (-1, -1, -1, -1, -1, -1)
 	polies = []
 	points = []
 	for i, step in enumerate(result[0]['legs'][0]['steps']):
@@ -26,8 +30,12 @@ def get_gmaps_route(A=None, B=None, saving=False, example=False):
 	points.append((step['end_location']['lat'], step['end_location']['lng']))
 	legs = result[0]['legs']
 	start_address = legs[0]['start_address']
+	start_coord = (legs[0]['start_location']['lat'], 
+				   legs[0]['start_location']['lng'])
 	end_address = legs[-1]['end_address']
-	return start_address, end_address, polies, points
+	end_coord = (legs[-1]['end_location']['lat'], 
+				   legs[-1]['end_location']['lng'])
+	return start_address, end_address, polies, points, start_coord, end_coord
 
 def get_gmaps_coords(location_str):
 	gmaps = googlemaps.Client(key=API_KEY)
@@ -35,3 +43,18 @@ def get_gmaps_coords(location_str):
 	location = query[0]['geometry']['location']
 	address = query[0]['formatted_address']
 	return (location['lat'], location['lng']), address
+	# return (43.6434661, -79.3790989), '40 Bay St, Toronto, ON M5J 2X2, Canada'
+
+
+# gmaps = googlemaps.Client(key=API_KEY)
+# A = 'London, Ontario'
+# B = 'Ottawa, Ontario'
+# result = gmaps.directions(A, B, mode='driving', units='metric')
+# pickle.dump(result, open('temp.pickle', 'wb'))
+
+# result = pickle.load(open('temp.pickle', 'rb'))
+# print(result[0].keys())
+# print(result[0]['legs'][0].keys())
+
+# print(result[0]['legs'][0]['start_location'])
+# print(result[0]['legs'][0]['start_address'])
