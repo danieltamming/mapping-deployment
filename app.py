@@ -18,7 +18,9 @@ def get_response(message):
 	if (lat > transit_top or lat < transit_bottom 
 			or lng < transit_left or lng > transit_right):
 		return ('Pedestrian must be within range of Toronto Public Transit.'
-				' Please try again.')
+				' Please try again. Send the pedestrian\'s location, the'
+				' driver\'s location, and their shared final destination,'
+				' separated by periods.')
 	(start_address, end_address, polies, points, drive_start_coord, 
 		end_coord) = get_gmaps_route(A=start_drive, B=end_drive)
 	if start_address == -1:
