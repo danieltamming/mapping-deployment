@@ -7,7 +7,7 @@ import polyline
 from path import Path
 
 # from keys import API_KEY
-API_KEY = os.environ['VERIFY_TOKEN']
+API_KEY = os.environ['API_KEY']
 
 def get_gmaps_route(A=None, B=None, saving=False, example=False):
 	temp_file = 'data/example.pickle'
