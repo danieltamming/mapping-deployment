@@ -6,6 +6,9 @@ import polyline
 
 from path import Path
 
+# from keys import API_KEY
+API_KEY = os.environ['VERIFY_TOKEN']
+
 def get_gmaps_route(A=None, B=None, saving=False, example=False):
 	temp_file = 'data/example.pickle'
 	if example:
@@ -36,7 +39,6 @@ def get_gmaps_route(A=None, B=None, saving=False, example=False):
 	return start_address, end_address, polies, points
 
 def get_gmaps_coords(location_str):
-	from keys import API_KEY
 	gmaps = googlemaps.Client(key=API_KEY)
 	query = gmaps.geocode(location_str)
 	location = query[0]['geometry']['location']
