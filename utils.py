@@ -182,15 +182,18 @@ def prune_coords(coords):
 
 def get_meeting_location(DG, my_df, stops, start_coord, 
 						 drive_coords, trip_names):
-	drive_coords = prune_coords(drive_coords)
-	if drive_coords == -1:
-		return -1
-	best_time = float('inf')
-	for end_coord in tqdm(drive_coords):
-		if get_travel_time(start_coord, end_coord) < 7*60:
-			return 'the pedestrian\'s current location.'
-		path = get_best_route(DG, my_df, stops, start_coord, end_coord, 8)
-		if path.travel_time < best_time:
-			best_time = path.travel_time
-			best_path = path
-	return best_path.get_meetup_location(stops, trip_names)
+	try:
+		drive_coords = prune_coords(drive_coords)
+		if drive_coords == -1:
+			return -1
+		best_time = float('inf')
+		for end_coord in tqdm(drive_coords):
+			if get_travel_time(start_coord, end_coord) < 7*60:
+				return 'the pedestrian\'s current location.'
+			path = get_best_route(DG, my_df, stops, start_coord, end_coord, 8)
+			if path.travel_time < best_time:
+				best_time = path.travel_time
+				best_path = path
+		return best_path.get_meetup_location(stops, trip_names)
+	except:
+		return 'Sorry, we made an error. Please try a different input.'
