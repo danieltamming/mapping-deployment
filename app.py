@@ -32,7 +32,7 @@ def get_response(message):
 	if meetup_location == -1:
 		return ('Driver must be passing through the Greater Toronto Area.'
 				' Please try again.')
-	return 'Arrange to meet at the following TTC stop: ' + meetup_location
+	return 'Arrange to meet at: ' + meetup_location
 
 transit_top = 43.90975
 transit_left = -79.649908

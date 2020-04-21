@@ -188,7 +188,7 @@ def get_meeting_location(DG, my_df, stops, start_coord,
 	best_time = float('inf')
 	for end_coord in tqdm(drive_coords):
 		if get_travel_time(start_coord, end_coord) < 7*60:
-			return 'Meet at pedestrian\'s current location.'
+			return 'the pedestrian\'s current location.'
 		path = get_best_route(DG, my_df, stops, start_coord, end_coord, 8)
 		if path.travel_time < best_time:
 			best_time = path.travel_time
