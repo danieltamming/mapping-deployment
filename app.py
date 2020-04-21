@@ -27,31 +27,29 @@ def get_response(message):
 		return ('Travel between the driver\'s starting location and the shared'
 				' final destination must be possible by automobile.'
 				' Please try again.')
-	# for (lat, lng) in [drive_start_coord, end_coord]:
-	# 	if (lat > ont_top or lat < ont_bottom 
-	# 			or lng < ont_left or lng > ont_right):
-	# 		return ('Driver\'s starting location and the shared final'
-	# 				' destination must be in Ontario, Canada.'
-	# 				' Please try again.')
 	meetup_location = get_meeting_location(
 		DG, my_df, stops, start_coord, polies, trip_names)
 	if meetup_location == -1:
 		return ('Driver must be passing through the Greater Toronto Area.'
 				' Please try again.')
 	return 'Arrange to meet at the following TTC stop: ' + meetup_location
-	# return 'Hello'
 
 transit_top = 43.90975
 transit_left = -79.649908
 transit_bottom = 43.591811
 transit_right = -79.123111
-# ont_top = 56.86
-# ont_left = -95.16
-# ont_bottom = 41.66
-# ont_right = -74.34
 
 my_df, stops, trip_names, DG = get_all_data()
-# print(get_response(input('Enter input: ')))
+
+# start_pedestrian = 'Union station toronto' 
+# start_drive = 'Toronto Public LIbrary'
+# end_drive = 'High Park toronto'
+# start_coord, start_address = get_gmaps_coords(start_pedestrian)
+# (start_address, end_address, polies, points, drive_start_coord, 
+# 	end_coord) = get_gmaps_route(A=start_drive, B=end_drive)
+# meetup_location = get_meeting_location(
+# 	DG, my_df, stops, start_coord, polies, trip_names)
+# print(meetup_location)
 # exit()
 
 FB_API_URL = 'https://graph.facebook.com/v2.6/me/messages'

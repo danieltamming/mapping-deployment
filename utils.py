@@ -6,7 +6,8 @@ import networkx.algorithms.shortest_paths.weighted as algos
 from tqdm import tqdm
 
 from gmaps import get_gmaps_route, get_gmaps_coords
-from graphing import get_graph, add_temp_stops, remove_temp_stops
+from graphing import (get_graph, add_temp_stops, 
+					  remove_temp_stops, get_travel_time)
 from dataframe import get_df, get_stops, get_trip_names, get_closest_stops
 from path import Path
 
@@ -58,25 +59,10 @@ def plot_temp(polies):
 	plt.show()
 
 def get_user_input():
-	# lat = input('Enter pedestrian latitude coordinate: ')
-	# lon = input('Enter pedestrian longitude coordinate: ')
-	# start_coord = (lat, lon)
-	# print('\nDriver locations may be entered in any format acceptable'
-	# 	  ' by Google Maps (e.g. Pearson Airport).')
-	# return (lat, lon), start_drive, end_drive
 	start_pedestrian = input('Enter pedestrian starting location: ')
 	start_drive = input('Enter driver starting location: ')
 	end_drive = input('Enter ending location: ')
 	return start_pedestrian, start_drive, end_drive
-
-def get_example():
-	start_coord = (43.655900, -79.492757)
-	(start_address, end_address, polies, 
-		_) = get_gmaps_route(example=True)
-	print('Driver\'s starting address: ' + start_address)
-	print('Pedestrian\'s starting coordinates: {}'.format(start_coord))
-	print('Joint ending address: ' + end_address)
-	return polies, start_coord
 
 def get_custom():
 	approved = False
@@ -169,14 +155,18 @@ def prune_coords(coords):
 
 	coords = [(lat, lon, idx) for idx, (lat, lon) in enumerate(coords)]
 	coords = sorted(coords, key=lambda tup: tup[1])
-	left_idx = bisect.bisect_left([lon for (lat, lon, idx) in coords], transit_left)
+	left_idx = bisect.bisect_left(
+		[lon for (lat, lon, idx) in coords], transit_left)
 	coords = coords[left_idx:]
-	right_idx = bisect.bisect_right([lon for (lat, lon, idx) in coords], transit_right)
+	right_idx = bisect.bisect_right(
+		[lon for (lat, lon, idx) in coords], transit_right)
 	coords = coords[:right_idx]
 	coords = sorted(coords, key=lambda tup: tup[0])
-	bottom_idx = bisect.bisect_left([lat for (lat, lon, idx) in coords], transit_bottom)
+	bottom_idx = bisect.bisect_left(
+		[lat for (lat, lon, idx) in coords], transit_bottom)
 	coords = coords[bottom_idx:]
-	top_idx = bisect.bisect_right([lat for (lat, lon, idx) in coords], transit_top)
+	top_idx = bisect.bisect_right(
+		[lat for (lat, lon, idx) in coords], transit_top)
 	coords = coords[:top_idx]
 	coords = sorted(coords, key=lambda tup: tup[2])
 	coords = [(lat, lon) for (lat, lon, idx) in coords]
@@ -197,6 +187,8 @@ def get_meeting_location(DG, my_df, stops, start_coord,
 		return -1
 	best_time = float('inf')
 	for end_coord in tqdm(drive_coords):
+		if get_travel_time(start_coord, end_coord) < 7*60:
+			return 'Meet at pedestrian\'s current location.'
 		path = get_best_route(DG, my_df, stops, start_coord, end_coord, 8)
 		if path.travel_time < best_time:
 			best_time = path.travel_time
