@@ -7,7 +7,7 @@ Imagine Jack and Jill have plans to go to Bill's house. Jack has a vehicle and J
 What if Jack is willing to go out of his way in order to save Jill time? What if we decide Jill's time is twice as valuable as Jack's time, or vice versa? What if Jill is willing to walk a certain distance? How many times is Jill wishing to get off one bus (or subway or streetcar) and get onto another? We'd like to find the optimal meetup location given these (and possibly other) parameters. 
 
 ### Messenger Bot Use (pending approval from Facebook)
-Users are asked to send the bot the the pedestrian's location, the driver's location, and their shared final destination, separated by periods.
+Users are asked to send the bot the pedestrian's location, the driver's location, and their shared final destination, separated by periods.
 
 ### Tasks
  - [x] Get google maps API key
